@@ -11,7 +11,7 @@ export default function sketch(s) {
   s.preload = () => {};
   s.setup = () => {
     s.createCanvas(width, height);
-    handHitSound = s.loadSound("assets/sounds/hand-hit.mp3");
+    //handHitSound = s.loadSound("assets/sounds/hand-hit.mp3");
     bg = s.loadImage("assets/bg.jpg");
     flies = new s.Group();
     for (let i = 0; i < 20; i++) {
@@ -83,7 +83,7 @@ export default function sketch(s) {
             // !isHandClosed
           ) {
             //console.log("closed", palmPoints);
-            handHitSound.play();
+            //handHitSound.play();
             let maxX = Math.max(...palmPoints.map((o) => o.x));
             let minX = Math.min(...palmPoints.map((o) => o.x));
             //console.log(minX, maxX);
