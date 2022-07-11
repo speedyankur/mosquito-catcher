@@ -5,12 +5,15 @@ export default function sketch(s) {
   let flies;
   let isHandClosed = false;
   let palmPoints = [];
+  let score = 0;
 
   const width = 1400;
   const height = 700;
   s.preload = () => {};
   s.setup = () => {
     s.createCanvas(width, height);
+    s.textSize(18);
+    //s.textAlign(CENTER, CENTER);
     handHitSound = s.loadSound("assets/sounds/hand-hit.mp3");
     bg = s.loadImage("assets/bg.jpg");
     flies = new s.Group();
@@ -38,6 +41,7 @@ export default function sketch(s) {
     s.clear();
     s.scale(1, 1);
     s.background(bg);
+    s.text("Score : " + score, width - 110, 25);
     //s.drawGrid();
     //flies bounce against each others and against boxes
     flies.bounce(flies);
@@ -74,37 +78,21 @@ export default function sketch(s) {
         if (detections.hands.multiHandLandmarks.length > 0) {
           const indexFingerTip = detections.hands.multiHandLandmarks[0][8].y;
           const indexFingerLow = detections.hands.multiHandLandmarks[0][5].y;
-
-          if (
-            indexFingerTip >= indexFingerLow
-            //&&
-            // middleFingerTip >= middleFingerLow &&
-            // ringFingerTip >= ringFingerLow &&
-            // !isHandClosed
-          ) {
-            //console.log("closed", palmPoints);
-            //handHitSound.play();
+          if (indexFingerTip >= indexFingerLow) {
             let maxX = Math.max(...palmPoints.map((o) => o.x));
             let minX = Math.min(...palmPoints.map((o) => o.x));
-            //console.log(minX, maxX);
             let maxY = Math.max(...palmPoints.map((o) => o.y));
             let minY = Math.min(...palmPoints.map((o) => o.y));
-            //console.log(minY, maxY);
-            //s.rect(minX, minY, maxX - minX, maxY - minY);
             for (let i = 0; i < s.allSprites.length; i++) {
               let sprite = s.allSprites[i];
               if (sprite.position.x <= maxX && sprite.position.x >= minX) {
                 if (sprite.position.y <= maxY && sprite.position.y >= minY) {
                   sprite.remove();
+                  score = score + 100;
                   handHitSound.play();
                 }
               }
             }
-
-            //isHandClosed = true;
-          } else {
-            //console.log("open");
-            //isHandClosed = false;
           }
         }
 
